@@ -10,3 +10,5 @@ NUMBERWANG CALCULATOR
 	- "<Name>, you've been Wangernumbed" + picture??? 
 	  or
 	  "<Name>, you are numberwang!"
+
+- If time, figure out MediaPlayer to allow user to toggle music
