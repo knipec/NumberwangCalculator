@@ -1,0 +1,12 @@
+NUMBERWANG CALCULATOR
+- Choose name at start: maybe let user enter their name, then randomly assigns them either Julie or Simon
+
+- Wangernumb mode
+	- "Let's play Wangernumb" at start of Wangernumb mode
+	- After random number of keystrokes, it says "That's Wangernumb!" and switches you back to Numberwang
+	- Has "hmmm"s after every keystroke
+
+- When you close the app (???)
+	- "<Name>, you've been Wangernumbed" + picture??? 
+	  or
+	  "<Name>, you are numberwang!"
