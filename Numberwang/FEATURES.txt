@@ -12,3 +12,10 @@ NUMBERWANG CALCULATOR
 	  "<Name>, you are numberwang!"
 
 - If time, figure out MediaPlayer to allow user to toggle music
+
+- Number buttons/decimal button pick a random number to display
+	-Random number is random int, random float, random fractional number, or sqrt previous number
+- Clear button increases text size and changes to random color until next button press
+- Function buttons queue a pending function.
+	- Pending functions are resolved when another function button, or the equal sign, is clicked
+	- Pending functions act the same as pressing a number button
