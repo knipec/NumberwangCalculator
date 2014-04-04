@@ -89,7 +89,9 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
         //5% change of a decimal
         if (Math.random() < .05)
         {
-            output = output.substring(0, 6)+"."+Integer.toString(getRandomPositiveInt()).substring(0, 6);
+            String decimalPortion = Integer.toString(getRandomPositiveInt());
+
+            output = output.substring(0, Math.min(6, output.length()))+"."+decimalPortion.substring(0, Math.min(6, decimalPortion.length()));
         }
         //2% chance of adding a fraction, mutually exclusive
         else if (Math.random() < .02)
@@ -116,7 +118,6 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
                 output = "\u221A"+outputField.getText().toString();
             }
         }
-
         outputField.setText(output);
     }
 
