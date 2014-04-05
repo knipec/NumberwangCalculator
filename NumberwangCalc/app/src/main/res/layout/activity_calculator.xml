@@ -1,19 +1,8 @@
-
-<GridLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:columnCount="4"
-    android:rowCount="10"
-    android:orientation="horizontal">
-
-    <TextView
-        android:layout_column="0"
-        android:layout_gravity="fill"
-        android:gravity="left"
-        android:paddingLeft="8dp"
-        android:id="@+id/operatorfield"/>
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false">
 
     <TextView
         android:layout_width="wrap_content"
@@ -21,91 +10,134 @@
         android:text="@string/defaultnumbervalue"
         android:id="@+id/outputDisplay"
         android:layout_gravity="fill"
-        android:layout_columnSpan="4"
-        android:layout_column="0"
-        android:layout_row="0"
+        android:layout_marginTop="-10dp"
+        android:layout_alignTop="@+id/gridlayout"
+        android:layout_alignRight="@+id/gridlayout"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:gravity="right"
         android:textSize="12pt"
+        android:singleLine="true"
+
         />
 
-    <ToggleButton
+    <GridLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_columnSpan="3"
-        android:layout_gravity="fill"
-        android:textOff="Numberwang"
-        android:textOn="Wangernumb"
-        android:id="@+id/toggleButton" />
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:columnCount="4"
+        android:rowCount="11"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:id="@+id/gridlayout"
+        android:orientation="horizontal">
 
-    <Button
-        android:layout_column="3"
-        android:text="Clear"
-        android:id="@+id/clearbutton"/>
-    <Button
-        android:text="7"
-        android:tag="number"
-        android:id="@+id/button7"/>
-    <Button
-        android:text="8"
-        android:tag="number"
-        android:id="@+id/button8"/>
-    <Button
-        android:text="9"
-        android:tag="number"
-        android:id="@+id/button9"/>
-    <Button
-        android:text="/"
-        android:tag="function"
-        android:id="@+id/divbutton"/>
-    <Button
-        android:text="4"
-        android:tag="number"
-        android:id="@+id/button4"/>
-    <Button
-        android:text="5"
-        android:tag="number"
-        android:id="@+id/button5"/>
-    <Button
-        android:text="6"
-        android:tag="number"
-        android:id="@+id/button6"/>
-    <Button
-        android:text="*"
-        android:tag="function"
-        android:id="@+id/multbutton"/>
-    <Button
-        android:text="1"
-        android:tag="number"
-        android:id="@+id/button1"/>
-    <Button
-        android:text="2"
-        android:tag="number"
-        android:id="@+id/button2"/>
-    <Button
-        android:text="3"
-        android:tag="number"
-        android:id="@+id/button3"/>
-    <Button
-        android:text="-"
-        android:tag="function"
-        android:id="@+id/minbutton"/>
-    <Button
-        android:text="0"
-        android:tag="number"
-        android:id="@+id/button0"/>
-    <Button
-        android:text="."
-        android:tag="number"
-        android:id="@+id/dotbutton"/>
-    <Button
-        android:text="="
-        android:id="@+id/eqbutton"/>
-    -->
-    <Button
-        android:text="+"
-        android:tag="function"
-        android:id="@+id/plusbutton"/>
 
-</GridLayout>
+        <TextView
+            android:layout_column="0"
+            android:layout_gravity="fill"
+            android:gravity="left"
+            android:paddingLeft="8dp"
+            android:id="@+id/operatorfield"/>
+
+        <!--
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/defaultnumbervalue"
+            android:id="@+id/outputDisplay"
+            android:layout_gravity="fill"
+            android:layout_columnSpan="4"
+            android:layout_column="0"
+            android:layout_row="0"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:gravity="right"
+            android:textSize="12pt"
+            />
+        -->
+
+        <ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_columnSpan="3"
+            android:layout_gravity="fill"
+            android:textOff="Numberwang"
+            android:textOn="Wangernumb"
+            android:id="@+id/toggleButton" />
+
+        <Button
+            android:layout_column="3"
+            android:text="Clear"
+            android:id="@+id/clearbutton"/>
+        <Button
+            android:text="7"
+            android:tag="number"
+            android:id="@+id/button7"/>
+        <Button
+            android:text="8"
+            android:tag="number"
+            android:id="@+id/button8"/>
+        <Button
+            android:text="9"
+            android:tag="number"
+            android:id="@+id/button9"/>
+        <Button
+            android:text="/"
+            android:tag="function"
+            android:id="@+id/divbutton"/>
+        <Button
+            android:text="4"
+            android:tag="number"
+            android:id="@+id/button4"/>
+        <Button
+            android:text="5"
+            android:tag="number"
+            android:id="@+id/button5"/>
+        <Button
+            android:text="6"
+            android:tag="number"
+            android:id="@+id/button6"/>
+        <Button
+            android:text="*"
+            android:tag="function"
+            android:id="@+id/multbutton"/>
+        <Button
+            android:text="1"
+            android:tag="number"
+            android:id="@+id/button1"/>
+        <Button
+            android:text="2"
+            android:tag="number"
+            android:id="@+id/button2"/>
+        <Button
+            android:text="3"
+            android:tag="number"
+            android:id="@+id/button3"/>
+        <Button
+            android:text="-"
+            android:tag="function"
+            android:id="@+id/minbutton"/>
+        <Button
+            android:text="0"
+            android:tag="number"
+            android:id="@+id/button0"/>
+        <Button
+            android:text="."
+            android:tag="number"
+            android:id="@+id/dotbutton"/>
+        <Button
+            android:text="="
+            android:id="@+id/eqbutton"/>
+        <Button
+            android:text="+"
+            android:tag="function"
+            android:id="@+id/plusbutton"/>
+    </GridLayout>
+
+</RelativeLayout>
+
+
+
