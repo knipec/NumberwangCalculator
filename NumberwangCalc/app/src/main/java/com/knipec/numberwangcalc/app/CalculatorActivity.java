@@ -44,6 +44,8 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
     private int defaultOutputTextSize = 27;
     private int defaultOutputTextColor = Color.rgb(0,0,0);
 
+    private Toast lastToast;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +87,7 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
     {
         super.onSaveInstanceState(savedInstanceState);
         //Internal state
-        savedInstanceState.putBoolean("wangernumb", wangernumb);
+        savedInstanceState.putInt("wangernumb", wangernumb);
         savedInstanceState.putBoolean("isPendingFunction", isPendingFunction);
         savedInstanceState.putBoolean("argumentProvided", argumentProvided);
         savedInstanceState.putInt("timeToNextNumberwang", timeToNextNumberwang);
@@ -103,7 +105,7 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
     {
         super.onRestoreInstanceState(savedInstanceState);
         //Internal state
-        wangernumb = savedInstanceState.getBoolean("wangernumb");
+        wangernumb = savedInstanceState.getInt("wangernumb");
         isPendingFunction = savedInstanceState.getBoolean("isPendingFunction");
         argumentProvided = savedInstanceState.getBoolean("argumentProvided");
         timeToNextNumberwang = savedInstanceState.getInt("timeToNextNumberwang");
@@ -225,19 +227,19 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
                 }
                 if (r < 0.2)
                 {
-                    displayCenteredToast(getString(R.string.hmm), Color.rgb(0,0,0));
+                    displayShortToast(getString(R.string.hmm));
                 }
                 else if (r < 0.4)
                 {
-                    displayCenteredToast(getString(R.string.err), Color.rgb(0,0,0));
+                    displayShortToast(getString(R.string.err));
                 }
                 else if (r < 0.6)
                 {
-                    displayCenteredToast(getString(R.string.ehh), Color.rgb(0,0,0));
+                    displayShortToast(getString(R.string.ehh));
                 }
                 else if (r < 0.8)
                 {
-                    displayCenteredToast(getString(R.string.ohh), Color.rgb(0,0,0));
+                    displayShortToast(getString(R.string.ohh));
                 }
             }
         }
@@ -287,6 +289,26 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
         toast.setDuration(Toast.LENGTH_SHORT);
         toast.setView(toastLayout);
         toast.show();
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                toast.cancel();
+            }
+        }, 500);
+    }
+
+    private void displayShortToast(String message)
+    {
+        final Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
+        toast.show();
+
+        if (lastToast != null)
+        {
+            lastToast.cancel();
+        }
+        lastToast = toast;
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
