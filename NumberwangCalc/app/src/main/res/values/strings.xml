@@ -6,6 +6,13 @@
     <string name="action_settings">Settings</string>
     <string name="defaultnumbervalue">0</string>
     <string name="numberwang_message">That\'s Numberwang!</string>
+    <string name="lets_play_wangernum">"Let's play Wangernumb!"</string>
+    <string name="thats_wangernum">That\'s Wangernumb!</string>
+    <string name="hmm">Hmm...</string>
+    <string name="err">Err...</string>
+    <string name="ehh">Ehh...</string>
+    <string name="ohh">Ohh...</string>
+
 
 
 </resources>

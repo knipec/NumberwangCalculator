@@ -14,16 +14,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import android.widget.ToggleButton;
 import java.util.Random;
 
 
 public class CalculatorActivity extends Activity implements View.OnClickListener{
 
+    Random rnd = new Random();
     /**
-     * Determines whether or not we are currently in wangernumb mode
+     * Determines number of button clicks left until wangernumb mode becomes numberwang mode
+     * If 0, you are in numberwang mode.
      */
-    private boolean wangernumb;
+    private int wangernumb;
 
     /**
      * Determines whether or not a function is pending a second "argument"
@@ -70,7 +72,7 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
         findViewById(R.id.toggleButton).setOnClickListener(this);
 
         //state setup
-        wangernumb = false;
+        wangernumb = 0;
         isPendingFunction = false;
         argumentProvided = false;
         //It goes up to 11
@@ -140,7 +142,10 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
         {
             if (view.getTag().toString().equals("number"))
             {
-                handlePossiblyDisplayNumberwang();
+                if (wangernumb == 0)
+                {
+                    handlePossiblyDisplayNumberwang();
+                }
                 setRandomResult();
 
                 if (isPendingFunction)
@@ -152,7 +157,10 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
             {
                 if (isPendingFunction && argumentProvided)
                 {
-                    handlePossiblyDisplayNumberwang();
+                    if (wangernumb == 0)
+                    {
+                        handlePossiblyDisplayNumberwang();
+                    }
                     setRandomResult();
                     argumentProvided = false;
                 }
@@ -179,13 +187,17 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
         {
             if (isPendingFunction && argumentProvided)
             {
-                handlePossiblyDisplayNumberwang();
+                if (wangernumb == 0)
+                {
+                    handlePossiblyDisplayNumberwang();
+                }
                 setRandomResult();
             }
             isPendingFunction = false;
             argumentProvided = false;
             setFunctionArea("");
         }
+
         if (view.getId() == R.id.clearbutton)
         {
             clearBehavior();
@@ -193,6 +205,57 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
         else
         {
             resetToDefaultOutputText();
+        }
+
+        boolean wasWangernumb;
+        if (wangernumb > 0)
+        {
+            wasWangernumb = true;
+            if (view.getId() == R.id.toggleButton)
+            {
+                wangernumb = 0;
+            }
+            else
+            {
+                wangernumb -= 1;
+                double r = 1;
+                if (wangernumb != 0)
+                {
+                    r = Math.random();
+                }
+                if (r < 0.2)
+                {
+                    displayCenteredToast(getString(R.string.hmm), Color.rgb(0,0,0));
+                }
+                else if (r < 0.4)
+                {
+                    displayCenteredToast(getString(R.string.err), Color.rgb(0,0,0));
+                }
+                else if (r < 0.6)
+                {
+                    displayCenteredToast(getString(R.string.ehh), Color.rgb(0,0,0));
+                }
+                else if (r < 0.8)
+                {
+                    displayCenteredToast(getString(R.string.ohh), Color.rgb(0,0,0));
+                }
+            }
+        }
+        else
+        {
+            wasWangernumb = false;
+            if (view.getId() == R.id.toggleButton)
+            {
+                displayCenteredToast(getString(R.string.lets_play_wangernum), Color.rgb(rnd.nextInt(200), rnd.nextInt(200), rnd.nextInt(200)));
+                // After 20 button clicks, state becomes numberwang mode again
+                wangernumb = 10 + rnd.nextInt(10);
+            }
+        }
+        if (wangernumb == 0 && wasWangernumb == true)
+        {
+            displayCenteredToast(getString(R.string.thats_wangernum), Color.rgb(rnd.nextInt(200), rnd.nextInt(200), rnd.nextInt(200)));
+            ToggleButton toggle = (ToggleButton) findViewById(R.id.toggleButton);
+            toggle.setChecked(false);
         }
     }
 
@@ -204,7 +267,7 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
         timeToNextNumberwang -= 1;
         if (timeToNextNumberwang <= 0)
         {
-            displayCenteredToast(getString(R.string.numberwang_message), Color.rgb((int)(Math.random()*200), (int)(Math.random()*200), (int)(Math.random()*200)));
+            displayCenteredToast(getString(R.string.numberwang_message), Color.rgb(rnd.nextInt(200), rnd.nextInt(200), rnd.nextInt(200)));
             //It goes up to 11
             timeToNextNumberwang = (int)(Math.random()*12);
         }
@@ -243,7 +306,6 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
 
     private void clearBehavior() {
         TextView outputField = (TextView)findViewById(R.id.outputDisplay);
-        Random rnd = new Random();
         outputField.setTextColor(Color.rgb(rnd.nextInt(200), rnd.nextInt(200), rnd.nextInt(200)));
         outputField.setTextSize(outputField.getTextSize() + 10);
     }
