@@ -4,10 +4,15 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Random;
 
@@ -30,6 +35,8 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
      * (and hence should be resolved), or hasn't (and can be overwritten)
      */
     private boolean argumentProvided;
+
+    private int timeToNextNumberwang;
 
     private int defaultOutputTextSize = 27;
     private int defaultOutputTextColor = Color.rgb(0,0,0);
@@ -65,6 +72,8 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
         wangernumb = false;
         isPendingFunction = false;
         argumentProvided = false;
+        //It goes up to 11
+        timeToNextNumberwang = (int)(Math.random()*12);
     }
 
 
@@ -94,6 +103,7 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
         {
             if (view.getTag().toString().equals("number"))
             {
+                handlePossiblyDisplayNumberwang();
                 setRandomResult();
 
                 if (isPendingFunction)
@@ -105,6 +115,7 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
             {
                 if (isPendingFunction && argumentProvided)
                 {
+                    handlePossiblyDisplayNumberwang();
                     setRandomResult();
                     argumentProvided = false;
                 }
@@ -131,6 +142,7 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
         {
             if (isPendingFunction && argumentProvided)
             {
+                handlePossiblyDisplayNumberwang();
                 setRandomResult();
             }
             isPendingFunction = false;
@@ -146,6 +158,42 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
             resetToDefaultOutputText();
         }
     }
+
+    private void handlePossiblyDisplayNumberwang()
+    {
+        timeToNextNumberwang -= 1;
+        if (timeToNextNumberwang <= 0)
+        {
+            displayCenteredToast(getString(R.string.numberwang_message), Color.rgb((int)(Math.random()*200), (int)(Math.random()*200), (int)(Math.random()*200)));
+            //It goes up to 11
+            timeToNextNumberwang = (int)(Math.random()*12);
+        }
+    }
+
+    private void displayCenteredToast(String message, int color)
+    {
+        LayoutInflater inflater = getLayoutInflater();
+        View toastLayout = inflater.inflate(R.layout.numberwang_toast, (ViewGroup) findViewById(R.id.numberwang_toast_root));
+
+        TextView text = (TextView) toastLayout.findViewById(R.id.text);
+        text.setText(message);
+        text.setTextColor(color);
+
+        final Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(toastLayout);
+        toast.show();
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                toast.cancel();
+            }
+        }, 500);
+    }
+
 
     private void resetToDefaultOutputText() {
         TextView outputField = (TextView)findViewById(R.id.outputDisplay);
