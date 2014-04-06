@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -74,6 +75,42 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
         argumentProvided = false;
         //It goes up to 11
         timeToNextNumberwang = (int)(Math.random()*12);
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState)
+    {
+        super.onSaveInstanceState(savedInstanceState);
+        //Internal state
+        savedInstanceState.putBoolean("wangernumb", wangernumb);
+        savedInstanceState.putBoolean("isPendingFunction", isPendingFunction);
+        savedInstanceState.putBoolean("argumentProvided", argumentProvided);
+        savedInstanceState.putInt("timeToNextNumberwang", timeToNextNumberwang);
+        //Output value and operator
+        savedInstanceState.putCharSequence("currentOutput", ((TextView) findViewById(R.id.outputDisplay)).getText());
+        savedInstanceState.putCharSequence("currentOperator", ((TextView)findViewById(R.id.operatorfield)).getText());
+        //Output Field format
+        savedInstanceState.putFloat("outputSize", ((TextView) findViewById(R.id.outputDisplay)).getTextSize());
+        savedInstanceState.putInt("outputColor", ((TextView) findViewById(R.id.outputDisplay)).getCurrentTextColor());
+    }
+
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState)
+    {
+        super.onRestoreInstanceState(savedInstanceState);
+        //Internal state
+        wangernumb = savedInstanceState.getBoolean("wangernumb");
+        isPendingFunction = savedInstanceState.getBoolean("isPendingFunction");
+        argumentProvided = savedInstanceState.getBoolean("argumentProvided");
+        timeToNextNumberwang = savedInstanceState.getInt("timeToNextNumberwang");
+        //Output value and operator
+        ((TextView)findViewById(R.id.outputDisplay)).setText(savedInstanceState.getCharSequence("currentOutput"));
+        ((TextView)findViewById(R.id.operatorfield)).setText(savedInstanceState.getCharSequence("currentOperator"));
+        //Output field format
+        ((TextView)findViewById(R.id.outputDisplay)).setTextSize(TypedValue.COMPLEX_UNIT_PX, savedInstanceState.getFloat("outputSize"));
+        ((TextView)findViewById(R.id.outputDisplay)).setTextColor(savedInstanceState.getInt("outputColor"));
     }
 
 
@@ -159,6 +196,9 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
         }
     }
 
+    /**
+     * Updated numberwang counter, checks whether to display numberwang, and if it should displays it
+     */
     private void handlePossiblyDisplayNumberwang()
     {
         timeToNextNumberwang -= 1;
