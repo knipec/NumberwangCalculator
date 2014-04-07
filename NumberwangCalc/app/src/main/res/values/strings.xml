@@ -14,6 +14,9 @@
     <string name="ohh">Ohh...</string>
     <string name="welcome">Welcome</string>
     <string name="rotateboard">Let\'s rotate the board!</string>
+    <string name="nameprompt_title">"Numberwang: the calculator that simply everyone...is talking about? Yes."</string>
+    <string name="nameprompt_message">"Enter your name"</string>
+
 
 
 </resources>

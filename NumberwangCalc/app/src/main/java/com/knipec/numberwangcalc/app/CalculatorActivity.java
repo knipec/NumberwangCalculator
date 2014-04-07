@@ -92,7 +92,8 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
         isPendingFunction = false;
         argumentProvided = false;
 
-        if (getSharedPreferences(PREFS_NAME, 0).getString("username", null) == null)
+        if (true)
+//        if (getSharedPreferences(PREFS_NAME, 0).getString("username", null) == null)
         {
             setUsername();
         }
@@ -111,6 +112,7 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
     {
         super.onPause();
         saveState();
+        displayCenteredToast("PAUSED"+username, Color.rgb(0,0,0));
     }
 
 
@@ -458,8 +460,15 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
     {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-        alert.setTitle("Numberwang: the maths quiz that simply everyone...is talking about? Yes.");
-        alert.setMessage("Enter your name");
+        TextView textView = new TextView(this);
+        textView.setText(getString(R.string.nameprompt_title));
+        textView.setTextSize(24);
+        textView.setGravity(Gravity.CENTER);
+        textView.setTextColor(Color.rgb(0, 153, 204));
+        alert.setCustomTitle(textView);
+
+//        alert.setTitle(getString(R.string.nameprompt_title));
+        alert.setMessage(getString(R.string.nameprompt_message));
 
         // Set an EditText view to get user input
         final EditText input = new EditText(this);
