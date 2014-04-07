@@ -2,7 +2,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clipChildren="false">
+    android:clipChildren="false"
+    android:id="@+id/layoutroot">
 
     <TextView
         android:layout_width="wrap_content"
@@ -136,6 +137,28 @@
             android:tag="function"
             android:id="@+id/plusbutton"/>
     </GridLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="invisible"
+        android:src="@drawable/jeeeefff"
+        android:id="@+id/spinimage1"/>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="invisible"
+        android:src="@drawable/jeffandmoose"
+        android:id="@+id/spinimage2"/>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="invisible"
+        android:src="@drawable/jeffphone"
+        android:id="@+id/spinimage3"/>
 
 </RelativeLayout>
 

@@ -1,5 +1,9 @@
 package com.knipec.numberwangcalc.app;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -14,6 +18,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.LinearInterpolator;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -133,7 +141,7 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
         wangernumb = state.getInt("wangernumb", 0);
         isPendingFunction = state.getBoolean("isPendingFunction", false);
         argumentProvided = state.getBoolean("argumentProvided", false);
-        timeToNextNumberwang = state.getInt("timeToNextNumberwang", (int)(Math.random()*12));
+        timeToNextNumberwang = state.getInt("timeToNextNumberwang", (int) (Math.random() * 12));
         username = state.getString("username", null);
         //Output value and operator
         ((TextView)findViewById(R.id.outputDisplay)).setText(state.getString("currentOutput", "0"));
@@ -274,9 +282,10 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
             wasWangernumb = false;
             if (view.getId() == R.id.toggleButton)
             {
-                displayCenteredToast(getString(R.string.lets_play_wangernum), Color.rgb(rnd.nextInt(200), rnd.nextInt(200), rnd.nextInt(200)));
+                displayCenteredToast(getString(R.string.rotateboard), Color.rgb(rnd.nextInt(200), rnd.nextInt(200), rnd.nextInt(200)));
                 // After 20 button clicks, state becomes numberwang mode again
                 wangernumb = 10 + rnd.nextInt(10);
+                spin();
             }
         }
         if (wangernumb == 0 && wasWangernumb == true)
@@ -488,5 +497,91 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
         // Somehow display a welcome message
         displayCenteredToast(getString(R.string.welcome) + " " + username, Color.rgb(0,0,0));
     }
+
+    private void spin()
+    {
+        spin(0, null);
+    }
+
+    private void spin(int segment, View image)
+    {
+        final int thisSegment = segment;
+
+        final View toAnimate = findViewById(R.id.layoutroot);
+        final View spinImage;
+        if (image == null)
+        {
+            double imageSelector = Math.random();
+            if (imageSelector < .33)
+            {
+                spinImage = findViewById(R.id.spinimage1);
+            }
+            else if (imageSelector < .67)
+            {
+                spinImage = findViewById(R.id.spinimage2);
+            }
+            else
+            {
+                spinImage = findViewById(R.id.spinimage3);
+            }
+        }
+        else
+        {
+            spinImage = image;
+        }
+
+        AnimatorSet set = new AnimatorSet();
+        if (segment == 0)
+        {
+            set.play(ObjectAnimator.ofFloat(toAnimate, View.SCALE_X, 1, 0));
+            set.setDuration(1000);
+            set.setInterpolator(new AccelerateInterpolator());
+        }
+        else if (segment == 1)
+        {
+            set.play(ObjectAnimator.ofFloat(toAnimate, View.SCALE_X, 0, 1, 0));
+            set.setDuration(1000);
+            set.setInterpolator(new LinearInterpolator());
+        }
+        else if (segment == 2)
+        {
+            set.play(ObjectAnimator.ofFloat(toAnimate, View.SCALE_X, 0, 1));
+            set.setDuration(1000);
+            set.setInterpolator(new DecelerateInterpolator());
+        }
+        if (segment < 2)
+        {
+            set.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    if (spinImage.getVisibility() == View.INVISIBLE)
+                    {
+                        spinImage.setVisibility(View.VISIBLE);
+                        findViewById(R.id.gridlayout).setVisibility(View.INVISIBLE);
+                        findViewById(R.id.outputDisplay).setVisibility(View.INVISIBLE);
+                        spin(thisSegment + 1, spinImage);
+                    }
+                    else
+                    {
+                        spinImage.setVisibility(View.INVISIBLE);
+                        findViewById(R.id.gridlayout).setVisibility(View.VISIBLE);
+                        findViewById(R.id.outputDisplay).setVisibility(View.VISIBLE);
+                        spin(thisSegment+1, spinImage);
+                    }
+                }
+            });
+        }
+        else
+        {
+            set.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    displayCenteredToast(getString(R.string.lets_play_wangernum), Color.rgb(rnd.nextInt(200), rnd.nextInt(200), rnd.nextInt(200)));
+                }
+            });
+        }
+        set.start();
+    }
+
 
 }
