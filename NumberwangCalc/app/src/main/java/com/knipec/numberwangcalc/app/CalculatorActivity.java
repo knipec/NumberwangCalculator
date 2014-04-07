@@ -3,6 +3,7 @@ package com.knipec.numberwangcalc.app;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -45,6 +46,9 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
 
     private int defaultOutputTextSize = 27;
     private int defaultOutputTextColor = Color.rgb(0,0,0);
+    private String PREFS_NAME = "NumberwangCalcPrefs";
+
+    private Toast lastToast;
 
     private String username;
 
@@ -86,43 +90,55 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
         }
         //It goes up to 11
         timeToNextNumberwang = (int)(Math.random()*12);
+        restoreState();
+    }
+
+    protected void onStop()
+    {
+        super.onStop();
+        saveState();
+    }
+
+    protected void onPause()
+    {
+        super.onPause();
+        saveState();
     }
 
 
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState)
+    public void saveState()
     {
-        super.onSaveInstanceState(savedInstanceState);
+        SharedPreferences state = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = state.edit();
         //Internal state
-        savedInstanceState.putInt("wangernumb", wangernumb);
-        savedInstanceState.putBoolean("isPendingFunction", isPendingFunction);
-        savedInstanceState.putBoolean("argumentProvided", argumentProvided);
-        savedInstanceState.putInt("timeToNextNumberwang", timeToNextNumberwang);
-        savedInstanceState.putString("username", username);
+        editor.putInt("wangernumb", wangernumb);
+        editor.putBoolean("isPendingFunction", isPendingFunction);
+        editor.putBoolean("argumentProvided", argumentProvided);
+        editor.putInt("timeToNextNumberwang", timeToNextNumberwang);
         //Output value and operator
-        savedInstanceState.putCharSequence("currentOutput", ((TextView) findViewById(R.id.outputDisplay)).getText());
-        savedInstanceState.putCharSequence("currentOperator", ((TextView)findViewById(R.id.operatorfield)).getText());
+        editor.putString("currentOutput", ((TextView) findViewById(R.id.outputDisplay)).getText().toString());
+        editor.putString("currentOperator", ((TextView) findViewById(R.id.operatorfield)).getText().toString());
         //Output Field format
-        savedInstanceState.putFloat("outputSize", ((TextView) findViewById(R.id.outputDisplay)).getTextSize());
-        savedInstanceState.putInt("outputColor", ((TextView) findViewById(R.id.outputDisplay)).getCurrentTextColor());
+        editor.putFloat("outputSize", ((TextView) findViewById(R.id.outputDisplay)).getTextSize());
+        editor.putInt("outputColor", ((TextView) findViewById(R.id.outputDisplay)).getCurrentTextColor());
+        editor.commit();
     }
 
 
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState)
+    public void restoreState()
     {
-        super.onRestoreInstanceState(savedInstanceState);
+        SharedPreferences state = getSharedPreferences(PREFS_NAME, 0);
         //Internal state
-        wangernumb = savedInstanceState.getInt("wangernumb");
-        isPendingFunction = savedInstanceState.getBoolean("isPendingFunction");
-        argumentProvided = savedInstanceState.getBoolean("argumentProvided");
-        timeToNextNumberwang = savedInstanceState.getInt("timeToNextNumberwang");
+        wangernumb = state.getInt("wangernumb", 0);
+        isPendingFunction = state.getBoolean("isPendingFunction", false);
+        argumentProvided = state.getBoolean("argumentProvided", false);
+        timeToNextNumberwang = state.getInt("timeToNextNumberwang", (int)(Math.random()*12));
         //Output value and operator
-        ((TextView)findViewById(R.id.outputDisplay)).setText(savedInstanceState.getCharSequence("currentOutput"));
-        ((TextView)findViewById(R.id.operatorfield)).setText(savedInstanceState.getCharSequence("currentOperator"));
+        ((TextView)findViewById(R.id.outputDisplay)).setText(state.getString("currentOutput", "0"));
+        ((TextView)findViewById(R.id.operatorfield)).setText(state.getString("currentOperator", ""));
         //Output field format
-        ((TextView)findViewById(R.id.outputDisplay)).setTextSize(TypedValue.COMPLEX_UNIT_PX, savedInstanceState.getFloat("outputSize"));
-        ((TextView)findViewById(R.id.outputDisplay)).setTextColor(savedInstanceState.getInt("outputColor"));
+        ((TextView)findViewById(R.id.outputDisplay)).setTextSize(TypedValue.COMPLEX_UNIT_PX, state.getFloat("outputSize", ((TextView)findViewById(R.id.outputDisplay)).getTextSize()));
+        ((TextView)findViewById(R.id.outputDisplay)).setTextColor(state.getInt("outputColor", ((TextView)findViewById(R.id.outputDisplay)).getCurrentTextColor()));
     }
 
 
@@ -141,7 +157,7 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            return true;
+            new SettingsDialogue().show(getFragmentManager(), "tag");
         }
         return super.onOptionsItemSelected(item);
     }
@@ -235,19 +251,19 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
                 }
                 if (r < 0.2)
                 {
-                    displayCenteredToast(getString(R.string.hmm), Color.rgb(0,0,0));
+                    displayShortToast(getString(R.string.hmm));
                 }
                 else if (r < 0.4)
                 {
-                    displayCenteredToast(getString(R.string.err), Color.rgb(0,0,0));
+                    displayShortToast(getString(R.string.err));
                 }
                 else if (r < 0.6)
                 {
-                    displayCenteredToast(getString(R.string.ehh), Color.rgb(0,0,0));
+                    displayShortToast(getString(R.string.ehh));
                 }
                 else if (r < 0.8)
                 {
-                    displayCenteredToast(getString(R.string.ohh), Color.rgb(0,0,0));
+                    displayShortToast(getString(R.string.ohh));
                 }
             }
         }
@@ -297,6 +313,26 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
         toast.setDuration(Toast.LENGTH_SHORT);
         toast.setView(toastLayout);
         toast.show();
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                toast.cancel();
+            }
+        }, 500);
+    }
+
+    private void displayShortToast(String message)
+    {
+        final Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
+        toast.show();
+
+        if (lastToast != null)
+        {
+            lastToast.cancel();
+        }
+        lastToast = toast;
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
