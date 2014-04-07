@@ -84,7 +84,7 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
         isPendingFunction = false;
         argumentProvided = false;
 
-        if (savedInstanceState == null || !savedInstanceState.containsKey("username"))
+        if (getSharedPreferences(PREFS_NAME, 0).getString("username", null) == null)
         {
             setUsername();
         }
@@ -115,6 +115,7 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
         editor.putBoolean("isPendingFunction", isPendingFunction);
         editor.putBoolean("argumentProvided", argumentProvided);
         editor.putInt("timeToNextNumberwang", timeToNextNumberwang);
+        editor.putString("username", username);
         //Output value and operator
         editor.putString("currentOutput", ((TextView) findViewById(R.id.outputDisplay)).getText().toString());
         editor.putString("currentOperator", ((TextView) findViewById(R.id.operatorfield)).getText().toString());
@@ -133,6 +134,7 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
         isPendingFunction = state.getBoolean("isPendingFunction", false);
         argumentProvided = state.getBoolean("argumentProvided", false);
         timeToNextNumberwang = state.getInt("timeToNextNumberwang", (int)(Math.random()*12));
+        username = state.getString("username", null);
         //Output value and operator
         ((TextView)findViewById(R.id.outputDisplay)).setText(state.getString("currentOutput", "0"));
         ((TextView)findViewById(R.id.operatorfield)).setText(state.getString("currentOperator", ""));
