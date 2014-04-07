@@ -1,21 +1,30 @@
 NUMBERWANG CALCULATOR
+________________________________________________________
+To do:
 - Choose name at start: maybe let user enter their name, then randomly assigns them either Julie or Simon
 
+
+- When you close the app (???)
+	- "<Name>, you've been Wangernumbed" + picture??? 
+	  or
+	  "<Name>, you are (today's) numberwang!"
+________________________________________________________
+If time:
+- Animate the "Wangernumb" and "Numberwang" icons
+- Figure out MediaPlayer to allow user to toggle music
+
+________________________________________________________
+Completed:
 - Wangernumb mode
 	- "Let's play Wangernumb" at start of Wangernumb mode
 	- After random number of keystrokes, it says "That's Wangernumb!" and switches you back to Numberwang
 	- Has "hmmm"s after every keystroke
 
-- When you close the app (???)
-	- "<Name>, you've been Wangernumbed" + picture??? 
-	  or
-	  "<Name>, you are numberwang!"
-
-- If time, figure out MediaPlayer to allow user to toggle music
-
 - Number buttons/decimal button pick a random number to display
 	-Random number is random int, random float, random fractional number, or sqrt previous number
+
 - Clear button increases text size and changes to random color until next button press
+
 - Function buttons queue a pending function.
 	- Pending functions are resolved when another function button, or the equal sign, is clicked
 	- Pending functions act the same as pressing a number button

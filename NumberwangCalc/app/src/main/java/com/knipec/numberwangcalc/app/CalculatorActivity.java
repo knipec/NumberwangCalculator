@@ -1,6 +1,7 @@
 package com.knipec.numberwangcalc.app;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -44,6 +46,8 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
     private int defaultOutputTextSize = 27;
     private int defaultOutputTextColor = Color.rgb(0,0,0);
 
+    private String username;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +79,11 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
         wangernumb = 0;
         isPendingFunction = false;
         argumentProvided = false;
+
+        if (savedInstanceState == null || !savedInstanceState.containsKey("username"))
+        {
+            setUsername();
+        }
         //It goes up to 11
         timeToNextNumberwang = (int)(Math.random()*12);
     }
@@ -85,10 +94,11 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
     {
         super.onSaveInstanceState(savedInstanceState);
         //Internal state
-        savedInstanceState.putBoolean("wangernumb", wangernumb);
+        savedInstanceState.putInt("wangernumb", wangernumb);
         savedInstanceState.putBoolean("isPendingFunction", isPendingFunction);
         savedInstanceState.putBoolean("argumentProvided", argumentProvided);
         savedInstanceState.putInt("timeToNextNumberwang", timeToNextNumberwang);
+        savedInstanceState.putString("username", username);
         //Output value and operator
         savedInstanceState.putCharSequence("currentOutput", ((TextView) findViewById(R.id.outputDisplay)).getText());
         savedInstanceState.putCharSequence("currentOperator", ((TextView)findViewById(R.id.operatorfield)).getText());
@@ -103,7 +113,7 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
     {
         super.onRestoreInstanceState(savedInstanceState);
         //Internal state
-        wangernumb = savedInstanceState.getBoolean("wangernumb");
+        wangernumb = savedInstanceState.getInt("wangernumb");
         isPendingFunction = savedInstanceState.getBoolean("isPendingFunction");
         argumentProvided = savedInstanceState.getBoolean("argumentProvided");
         timeToNextNumberwang = savedInstanceState.getInt("timeToNextNumberwang");
@@ -379,7 +389,8 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
      * Returns a random integer in a given range. Biased towards small numbers with 90% probability.
      * Returns a negative number with 5% probability
      */
-    private int getRandomInt(boolean canBeNegative) {
+    private int getRandomInt(boolean canBeNegative)
+    {
         int result = 0;
         if (Math.random() < .9)
         {
@@ -394,6 +405,50 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
             return result*-1;
         }
         return result;
-
     }
+
+    private void setUsername()
+    {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        alert.setTitle("Numberwang: the maths quiz that simply everyone...is talking about? Yes.");
+        alert.setMessage("Enter your name");
+
+        // Set an EditText view to get user input
+        final EditText input = new EditText(this);
+        alert.setView(input);
+        alert.setPositiveButton("Also Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                String name = input.getText().toString();
+                chooseUsername(name);
+            }
+        });
+
+        alert.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                String name = input.getText().toString();
+                chooseUsername(name);
+            }
+        });
+
+        alert.show();
+    }
+
+    private void chooseUsername(String name)
+    {
+        int nameHash = name.hashCode();
+        int julieHash = "Julie".hashCode();
+        int simonHash = "Simon".hashCode();
+        if (Math.abs(nameHash-julieHash) < Math.abs(nameHash-simonHash))
+        {
+            username = "Julie";
+        }
+        else
+        {
+            username = "Simon";
+        }
+        // Somehow display a welcome message
+        displayCenteredToast(getString(R.string.welcome) + " " + username, Color.rgb(0,0,0));
+    }
+
 }
