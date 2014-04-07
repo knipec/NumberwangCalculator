@@ -1,6 +1,9 @@
 package com.knipec.numberwangcalc.app;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.DialogFragment;
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -133,7 +136,7 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            return true;
+            new SettingsDialogue().show(getFragmentManager(), "tag");
         }
         return super.onOptionsItemSelected(item);
     }
