@@ -92,10 +92,14 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
         isPendingFunction = false;
         argumentProvided = false;
 
-        if (true)
-//        if (getSharedPreferences(PREFS_NAME, 0).getString("username", null) == null)
+        username = getSharedPreferences(PREFS_NAME, 0).getString("username", null);
+        if (username == null)
         {
             setUsername();
+        }
+        else
+        {
+            displayCenteredToast(getString(R.string.welcome) + " " + username, Color.rgb(0,0,0));
         }
         //It goes up to 11
         timeToNextNumberwang = (int)(Math.random()*12);
@@ -112,9 +116,7 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
     {
         super.onPause();
         saveState();
-        displayCenteredToast("PAUSED"+username, Color.rgb(0,0,0));
     }
-
 
     public void saveState()
     {
@@ -156,7 +158,7 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
+
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.calculator, menu);
         return true;
@@ -261,19 +263,19 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
                 {
                     r = Math.random();
                 }
-                if (r < 0.2)
+                if (r < 0.15)
                 {
                     displayShortToast(getString(R.string.hmm));
                 }
-                else if (r < 0.4)
+                else if (r < 0.3)
                 {
                     displayShortToast(getString(R.string.err));
                 }
-                else if (r < 0.6)
+                else if (r < 0.45)
                 {
                     displayShortToast(getString(R.string.ehh));
                 }
-                else if (r < 0.8)
+                else if (r < 0.6)
                 {
                     displayShortToast(getString(R.string.ohh));
                 }
@@ -380,80 +382,132 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
     private void setRandomResult() {
         TextView outputField = (TextView)findViewById(R.id.outputDisplay);
 
-        String output = "";
-        output = output+getRandomInt();
+        // Shamelessly taken from 2048-numberwang on github
+        double value = Math.ceil(Math.random() * (Math.random() < 0.9 ? 2 : 4) * 4);
+        String output = String.valueOf((int)value);
+        double random = Math.random();
+        String chars = "αβγδεƒghijkmnpqrsστμνωχyzπλθ∑Δ∞";
 
-        //5% change of a decimal
-        if (Math.random() < .05)
-        {
-            String decimalPortion = Integer.toString(getRandomPositiveInt());
-
-            output = output.substring(0, Math.min(6, output.length()))+"."+decimalPortion.substring(0, Math.min(6, decimalPortion.length()));
+        // Decimal number
+        if (random > 0.95) {
+            output = output + '.' + String.valueOf((int)Math.ceil(Math.random() * 9));
         }
-        //2% chance of adding a fraction, mutually exclusive
-        else if (Math.random() < .02)
-        {
-            double fracType = Math.random();
-            if (fracType < .33)
-            {
-                output = output+"\u00BD";
-            }
-            else if (fracType < .67)
-            {
-                output = output+"\u2153";
-            }
-            else
-            {
-                output = output+"\u00BC";
-            }
+        // Negative number
+        else if (random < 0.04) {
+            output = '-' + output;
         }
-
-        if (Math.random() < .02)
-        {
-            if (!(outputField.getText().charAt(0) == (char)8730))
-            {
-                output = "\u221A"+outputField.getText().toString();
-            }
+        // Random letter
+        else if (random > 0.04 && random < 0.07) {
+            output = Character.toString(chars.charAt((int) Math.floor(Math.random() * chars.length())));
+        }
+        // Zero
+        else if (random > 0.07 && random < 0.1) {
+            output = "0";
+        }
+        // Two digit number
+        else if (random > 0.1 && random < 0.3) {
+            output = String.valueOf((int) (value + Math.floor(Math.random() * 100)));
+        }
+        // Three digit number
+        else if (random > 0.3 && random < 0.45) {
+            output = String.valueOf((int) (value + Math.floor(Math.random() * 1000)));
+        }
+        // Four digit number
+        else if (random > 0.45 && random < 0.55) {
+            output = String.valueOf((int) (value + Math.floor(Math.random() * 10000)));
+        }
+        // Five digit number
+        else if (random > 0.55 && random < 0.6) {
+            output = String.valueOf((int) (value + Math.floor(Math.random() * 100000)));
+        }
+        // Six digit number
+        else if (random > 0.6 && random < 0.65) {
+            output = String.valueOf((int) (value + Math.floor(Math.random() * 1000000)));
+        }
+        // Subtraction
+        else if (random > 0.65 && random < 0.68) {
+            output = output + '-' + String.valueOf((int)Math.ceil(Math.random() * 10));
+        }
+        // Addition
+        else if (random > 0.68 && random < 0.71) {
+            output = output + '+' + String.valueOf((int)Math.ceil(Math.random() * 10));
+        }
+        // Square root
+        else if (random > 0.71 && random < 0.74) {
+            output = '√' + output;
         }
         outputField.setText(output);
-    }
-
-    /**
-     * @return A positive integer subject to the same constraints as getRandomInt
-     */
-    private int getRandomPositiveInt()
-    {
-        return getRandomInt(false);
-    }
-
-    /**
-     * @return An integer subject to the same constraints as getrandomint
-     */
-    private int getRandomInt()
-    {
-        return getRandomInt(true);
-    }
-
-    /**
-     * Returns a random integer in a given range. Biased towards small numbers with 90% probability.
-     * Returns a negative number with 5% probability
-     */
-    private int getRandomInt(boolean canBeNegative)
-    {
-        int result = 0;
-        if (Math.random() < .9)
-        {
-            result = (int)(Math.random()*500);
-        }
-        else
-        {
-            result = (int)(Math.random()*10000000);
-        }
-        if (Math.random() < .05)
-        {
-            return result*-1;
-        }
-        return result;
+//        //5% change of a decimal
+//        if (Math.random() < .05)
+//        {
+//            String decimalPortion = Integer.toString(getRandomPositiveInt());
+//
+//            output = output.substring(0, Math.min(6, output.length()))+"."+decimalPortion.substring(0, Math.min(6, decimalPortion.length()));
+//        }
+//        //2% chance of adding a fraction, mutually exclusive
+//        else if (Math.random() < .02)
+//        {
+//            double fracType = Math.random();
+//            if (fracType < .33)
+//            {
+//                output = output+"\u00BD";
+//            }
+//            else if (fracType < .67)
+//            {
+//                output = output+"\u2153";
+//            }
+//            else
+//            {
+//                output = output+"\u00BC";
+//            }
+//        }
+//
+//        if (Math.random() < .02)
+//        {
+//            if (!(outputField.getText().charAt(0) == (char)8730))
+//            {
+//                output = "\u221A"+outputField.getText().toString();
+//            }
+//        }
+//        outputField.setText(output);
+//    }
+//
+//    /**
+//     * @return A positive integer subject to the same constraints as getRandomInt
+//     */
+//    private int getRandomPositiveInt()
+//    {
+//        return getRandomInt(false);
+//    }
+//
+//    /**
+//     * @return An integer subject to the same constraints as getrandomint
+//     */
+//    private int getRandomInt()
+//    {
+//        return getRandomInt(true);
+//    }
+//
+//    /**
+//     * Returns a random integer in a given range. Biased towards small numbers with 90% probability.
+//     * Returns a negative number with 5% probability
+//     */
+//    private int getRandomInt(boolean canBeNegative)
+//    {
+//        int result = 0;
+//        if (Math.random() < .9)
+//        {
+//            result = (int)(Math.random()*500);
+//        }
+//        else
+//        {
+//            result = (int)(Math.random()*10000000);
+//        }
+//        if (Math.random() < .05)
+//        {
+//            return result*-1;
+//        }
+//        return result;
     }
 
     private void setUsername()
@@ -503,7 +557,6 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
         {
             username = "Simon";
         }
-        // Somehow display a welcome message
         displayCenteredToast(getString(R.string.welcome) + " " + username, Color.rgb(0,0,0));
     }
 
