@@ -153,6 +153,16 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
         //Output field format
         ((TextView)findViewById(R.id.outputDisplay)).setTextSize(TypedValue.COMPLEX_UNIT_PX, state.getFloat("outputSize", ((TextView)findViewById(R.id.outputDisplay)).getTextSize()));
         ((TextView)findViewById(R.id.outputDisplay)).setTextColor(state.getInt("outputColor", ((TextView)findViewById(R.id.outputDisplay)).getCurrentTextColor()));
+
+        ToggleButton toggle = (ToggleButton) findViewById(R.id.toggleButton);
+        if (wangernumb > 0)
+        {
+            toggle.setChecked(true);
+        }
+        else
+        {
+            toggle.setChecked(false);
+        }
     }
 
 

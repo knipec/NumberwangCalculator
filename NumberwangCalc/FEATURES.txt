@@ -1,13 +1,10 @@
 NUMBERWANG CALCULATOR
 ________________________________________________________
 To do:
-- Choose name at start: maybe let user enter their name, then randomly assigns them either Julie or Simon
 
+- Wangernumb toggle button is correct when you reload
+- crop Jeff picture
 
-- When you close the app (???)
-	- "<Name>, you've been Wangernumbed" + picture??? 
-	  or
-	  "<Name>, you are (today's) numberwang!"
 ________________________________________________________
 If time:
 - Animate the "Wangernumb" and "Numberwang" icons
@@ -28,3 +25,15 @@ Completed:
 - Function buttons queue a pending function.
 	- Pending functions are resolved when another function button, or the equal sign, is clicked
 	- Pending functions act the same as pressing a number button
+
+- Choose name at start: maybe let user enter their name, then randomly assigns them either Julie or Simon
+
+- 2048 numberwang wacky numbers
+
+
+________________________________________________________
+Things we decided were impossible:
+- When you close the app (???)
+	- "<Name>, you've been Wangernumbed" + picture??? 
+	  or
+	  "<Name>, you are (today's) numberwang!"
