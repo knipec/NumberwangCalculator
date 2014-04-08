@@ -97,10 +97,7 @@ public class CalculatorActivity extends Activity implements View.OnClickListener
         {
             setUsername();
         }
-        else
-        {
-            displayCenteredToast(getString(R.string.welcome) + " " + username, Color.rgb(0,0,0));
-        }
+
         //It goes up to 11
         timeToNextNumberwang = (int)(Math.random()*12);
         restoreState();
